@@ -38,16 +38,22 @@ int main() {
         printf("Enter your choice: \033[0m");
         scanf("%d", &choice);
 
+
         switch (choice) {
             case 1:
                 registerUser();
+                system("pause");
+                   system("cls");
                 break;
             case 2:
                 if (loginUser()) {
                     printf("\033[1;32mLogin successful!\n\033[0m");
                     loggedIn = 1;
+                   system("pause");
+                   system("cls");
                 } else {
                     printf("\033[1;31mLogin failed. Invalid username or password.\n\033[0m");
+                
                 }
                 break;
             case 3:
@@ -69,9 +75,11 @@ int main() {
             printf("4. Logout\n");
             printf("Enter your choice: \033[0m");
             scanf("%d", &choice);
+            system("cls");
 
             switch (choice) {
                 case 1:
+                viewProducts();
                     addItem();
                     break;
                 case 3:
@@ -82,6 +90,7 @@ int main() {
                     printf("\033[1;32mLogged out successfully!\n\033[0m");
                     break;
                 case 2:
+                viewProducts();
                     deleteProduct();
                     break;
                 default:
@@ -99,6 +108,8 @@ int main() {
             printf("3. View Products\n");
             printf("Enter your choice: \033[0m");
             scanf("%d", &choice);
+            
+                   system("cls");
 
                 switch (choice) {
                     case 1:
@@ -217,6 +228,9 @@ void addItem() {
     fclose(file);
 
     printf("\033[1;32mProduct '%s' added successfully at %s.\n\033[0m", name, datetime);
+    system("pause");
+    system("cls");
+
 }
 
 void purchaseItem() {
@@ -257,6 +271,7 @@ void purchaseItem() {
                     found = 1;
                     printf("\033[1;33mEnter quantity to purchase for %s: \033[0m", name);
                     scanf("%d", &quantity);
+                    system("cls");
 
                     if (storedQuantity >= quantity) {
                         totalPrice = quantity * price;
@@ -287,6 +302,8 @@ void purchaseItem() {
 
             if (!found) {
                 printf("\033[1;31mProduct not found. Please enter a valid product name.\n\033[0m");
+                    system("cls");
+
             }
         }
     }
@@ -300,8 +317,13 @@ void purchaseItem() {
         change = money - totalCost;
         printf("\033[1;32mChange: %.2f\n", change);
         printf("Purchase successful!\n");
+                    system("pause");
+                    system("cls");
+
     } else {
         printf("\033[1;31mNot enough money. Purchase failed.\n\033[0m");
+                    system("cls");
+
     }
 }
 
