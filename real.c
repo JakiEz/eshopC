@@ -13,17 +13,13 @@ struct Product {
 };
 
 void deleteProduct(const char *filename, const char *productName, int quantity) {
-    FILE *tempFile = fopen("temp.csv", "w");
-    if (tempFile == NULL) {
-        perror("Error creating temporary file");
-        exit(EXIT_FAILURE);
-    }
-
-    FILE *file = fopen(filename, "r");
+    FILE *file = fopen(filename, "r+");
     if (file == NULL) {
         perror("Error opening file");
         exit(EXIT_FAILURE);
     }
+
+    long int currentPosition = 0;  
 
     char line[MAX_LINE_LENGTH];
     char *token;
@@ -40,23 +36,24 @@ void deleteProduct(const char *filename, const char *productName, int quantity) 
 
             if (currentQuantity > quantity) {
                 currentQuantity -= quantity;
-                fprintf(tempFile, "%s,%d\n", productName, currentQuantity);
+    
+                // Move the file pointer to the beginning of the line
+                fseek(file, currentPosition, SEEK_SET);
+                fprintf(file, "%s,%d\n", productName, currentQuantity);
             } else {
+                // If the quantity is less than or equal to the requested quantity, do not write this line back
                 continue;
             }
-        } else {
-            fputs(line, tempFile);
         }
+
+        currentPosition = ftell(file);  // Update the current position in the file
     }
 
     fclose(file);
-    fclose(tempFile);
 
-    remove(filename);
-    rename("temp.csv", filename);
-
-    printf("Product '%s' deleted successfully.\n", productName);
+    printf("Product '%s' deleted successfully.\n\n", productName);
 }
+
 
 void addProduct(const char *filename, const char *productName, const char *price, const char *quantity) {
     FILE *file = fopen(filename, "a");
@@ -193,17 +190,17 @@ void browseProducts(struct Product *products, int numProducts) {
         scanf("%d", &quantity);
 
         if (quantity > products[choice - 1].quantity) {
-            printf("Insufficient quantity. Please enter a smaller quantity.\n");
+            printf("Insufficient quantity. Please enter a smaller quaget only ntity.\n");
             continue;
         }
 
-        deleteProduct("sample_products.csv", products[choice - 1].name, quantity);
+        deleteProduct("sample_product.csv", products[choice - 1].name, quantity);
         totalCost += quantity * products[choice - 1].price;
 
         printf("Added %d units of %s to your cart. Current total: $%.2f\n", quantity, products[choice - 1].name, totalCost);
     }
 
-    printf("Total cost of your purchases: $%.2f\n", totalCost);
+    printf("Total cost of your purchases: $%.2f\n\n", totalCost);
 
     while (1) {
         printf("Enter the amount of money: ");
@@ -221,7 +218,7 @@ void browseProducts(struct Product *products, int numProducts) {
 }
 
 int main() {
-    const char *productFilename = "sample_products.csv"; 
+    const char *productFilename = "sample_product.csv"; 
     const char *userFilename = "sample_users.csv"; 
     char loginUsername[MAX_FIELD_LENGTH];
     char loginPassword[MAX_FIELD_LENGTH];

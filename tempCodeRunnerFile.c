@@ -1,2 +1,0 @@
-
-        exit(EXIT_FAILURE);
