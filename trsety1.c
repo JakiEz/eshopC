@@ -112,7 +112,7 @@ void registerUser() {
     printf("Enter password: ");
     scanf("%s", password);
 
-    // Choose role (1 for admin, 2 for employee)
+    
     printf("Choose role (1 for Admin, 2 for Employee): ");
     scanf("%d", &role);
 
@@ -190,6 +190,7 @@ void purchaseItem() {
     char name[MAX_SIZE];
     int quantity;
     float money;
+    float change = 0.0;
     int finishTransaction = 0;
 
     while (!finishTransaction) {
@@ -259,11 +260,14 @@ void purchaseItem() {
     scanf("%f", &money);
 
     if (money >= totalCost) {
+        change = money - totalCost;
+        printf("Change: %.2f\n", change);
         printf("Purchase successful!\n");
     } else {
         printf("Not enough money. Purchase failed.\n");
     }
 }
+
 
 void viewProducts() {
     FILE *file = fopen(PRODUCT_FILE, "r");
