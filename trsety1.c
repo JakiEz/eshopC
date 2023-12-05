@@ -84,6 +84,8 @@ int main() {
                     break;
                 case 3:
                     viewProducts();
+                    system("pause");
+            system("cls");
                     break;
                 case 4:
                     loggedIn = 0;
@@ -114,6 +116,7 @@ int main() {
                 switch (choice) {
                     case 1:
 
+        viewProducts();
                         purchaseItem();
                         break;
                     case 2:
@@ -122,6 +125,8 @@ int main() {
                         break;
                     case 3:
                         viewProducts();
+                        system("pause");
+            system("cls");
                         break;
                     default:
                         printf("Invalid choice. Please enter a valid option.\n");
@@ -242,8 +247,7 @@ void purchaseItem() {
     int finishTransaction = 0;
 
     while (!finishTransaction) {
-        // Display the product list before prompting for the product name
-        viewProducts();
+        
 
         printf("\033[1;33mEnter product name (or type 'finish' to complete the purchase): \033[0m");
         scanf("%s", name);
@@ -271,7 +275,7 @@ void purchaseItem() {
                     found = 1;
                     printf("\033[1;33mEnter quantity to purchase for %s: \033[0m", name);
                     scanf("%d", &quantity);
-                    system("cls");
+                    
 
                     if (storedQuantity >= quantity) {
                         totalPrice = quantity * price;
@@ -356,8 +360,7 @@ void viewProducts() {
     printf("\033[1;35m==================================================================================================================================\n");
     
     fclose(file);
-    system("pause");
-            system("cls");
+    
 }
 void deleteProduct() {
     char name[MAX_SIZE];
