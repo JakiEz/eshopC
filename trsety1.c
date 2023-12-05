@@ -58,6 +58,11 @@ int main() {
         }
     } else {
         if (loggedInUserRole == ADMIN) {
+
+             // Display ADMIN 
+    printf("\033[1;33m%*s*************************\n", (80 + 28) / 2, "");
+    printf("%*s*         ADMIN         *\n", (80 + 28) / 2, "");
+    printf("%*s*************************\033[0m\n", (80 + 28) / 2, "");
             printf("\033[1;31m1. Add Item\n");
             printf("2. Delete Item\n");
             printf("3. View Products\n");
@@ -83,6 +88,12 @@ int main() {
                     printf("\033[1;31mInvalid choice. Please enter a valid option.\n\033[0m");
             }
         } else if (loggedInUserRole == EMPLOYEE) {
+
+             // Display employee 
+    printf("\033[1;33m%*s*************************\n", (80 + 28) / 2, "");
+    printf("%*s*        EMPLOYEE       *\n", (80 + 28) / 2, "");
+    printf("%*s*************************\033[0m\n", (80 + 28) / 2, "");
+
             printf("\033[1;31m1. Purchase Item\n");
             printf("2. Logout\n");
             printf("3. View Products\n");
@@ -91,7 +102,7 @@ int main() {
 
                 switch (choice) {
                     case 1:
-                        viewProducts();
+
                         purchaseItem();
                         break;
                     case 2:
@@ -116,6 +127,11 @@ void registerUser() {
     char password[MAX_SIZE];
     int role;
 
+    // Display RIGISTER 
+    printf("\033[1;33m%*s*************************\n", (80 + 28) / 2, "");
+    printf("%*s*        REGISTER       *\n", (80 + 28) / 2, "");
+    printf("%*s*************************\033[0m\n", (80 + 28) / 2, "");
+
     printf("\033[1;33mEnter username: \033[0m");
     scanf("%s", username);
     printf("\033[1;33mEnter password: \033[0m");
@@ -139,6 +155,11 @@ void registerUser() {
 int loginUser() {
     char username[MAX_SIZE];
     char password[MAX_SIZE];
+
+     // Display LOGIN 
+    printf("\033[1;33m%*s*************************\n", (80 + 28) / 2, "");
+    printf("%*s*          LOGIN        *\n", (80 + 28) / 2, "");
+    printf("%*s*************************\033[0m\n", (80 + 28) / 2, "");
 
     printf("\033[1;33mEnter username: \033[0m");
     scanf("%s", username);
@@ -292,13 +313,13 @@ void viewProducts() {
     }
     // Display the shop product
     printf("\033[1;33m%*s*************************\n", (80 + 28) / 2, "");
-    printf("%*s*      PRODUCTS         *\n", (80 + 28) / 2, "");
+    printf("%*s*        PRODUCTS       *\n", (80 + 28) / 2, "");
     printf("%*s*************************\033[0m\n", (80 + 28) / 2, "");
 
-    printf("\n\033[1;35mProduct List:\n");
-    printf("====================================================================\n");
-    printf("\033[1;35mName\t\tPrice\t\tQuantity\t\tStock-date\n");
-    printf("====================================================================\n");
+    
+    printf("\033[1;35m==================================================================================================================================\n");
+    printf("\x1b[36m    Name\t\t                           Price\t\t         Quantity\t\t        Stock-date\n");
+    printf("\033[1;35m==================================================================================================================================\n");
 
     char line[MAX_SIZE];
     while (fgets(line, sizeof(line), file)) {
@@ -307,10 +328,10 @@ void viewProducts() {
         int quantity;
         char datetime[MAX_SIZE];
         sscanf(line, "%[^,],%f,%d,%[^\n]", name, &price, &quantity, datetime);
-        printf("\033[1;35m%-15s%-20.2f%-18d%-25s\n\033[0m", name, price, quantity, datetime);
+        printf("\x1b[36m%-50s%-33.2f%-25d%-25s\n", name, price, quantity, datetime);
     }
 
-    printf("=====================================================================\n");
+    printf("\033[1;35m==================================================================================================================================\n");
     
     fclose(file);
 }
