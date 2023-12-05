@@ -14,6 +14,7 @@ int loginUser();
 void addItem();
 void purchaseItem();
 void viewProducts();
+void deleteProduct();
 
 int loggedInUserRole = 0;
 
@@ -50,8 +51,9 @@ int main() {
         } else {
             if (loggedInUserRole == ADMIN) {
                 printf("1. Add Item\n");
-                printf("2. View Products\n");
-                printf("3. Logout\n");
+                printf("2. Delete Item\n");
+                printf("3. View Products\n");
+                printf("4. Logout\n");
                 printf("Enter your choice: ");
                 scanf("%d", &choice);
 
@@ -59,13 +61,15 @@ int main() {
                     case 1:
                         addItem();
                         break;
-                    case 2:
+                    case 3:
                         viewProducts();
                         break;
-                       
-                    case 3:
+                    case 4:
                         loggedIn = 0;
                         printf("Logged out successfully!\n");
+                        break;
+                    case 2:
+                        deleteProduct();
                         break;
                     default:
                         printf("Invalid choice. Please enter a valid option.\n");
@@ -283,7 +287,53 @@ void viewProducts() {
     }
 
     printf("=======================================\n");
+    
+    fclose(file);
+}
+void deleteProduct() {
+    char name[MAX_SIZE];
+
+    printf("Enter the name of the product to delete: ");
+    scanf("%s", name);
+
+    FILE *file = fopen(PRODUCT_FILE, "r");
+    if (file == NULL) {
+        printf("Error opening product file.\n");
+        exit(1);
+    }
+
+    FILE *tempFile = fopen("temp.csv", "w");
+    if (tempFile == NULL) {
+        fclose(file);
+        printf("Error opening temporary file.\n");
+        exit(1);
+    }
+
+    char line[MAX_SIZE];
+    int found = 0;
+
+    while (fgets(line, sizeof(line), file)) {
+        char storedName[MAX_SIZE];
+        float price;
+        int quantity;
+        sscanf(line, "%[^,],%f,%d", storedName, &price, &quantity);
+
+        if (strcmp(name, storedName) == 0) {
+            found = 1;
+            printf("Product found and deleted successfully!\n");
+        } else {
+            fprintf(tempFile, "%s,%.2f,%d\n", storedName, price, quantity);
+        }
+    }
 
     fclose(file);
+    fclose(tempFile);
+
+    remove(PRODUCT_FILE);
+    rename("temp.csv", PRODUCT_FILE);
+
+    if (!found) {
+        printf("Product not found. Deletion failed.\n");
+    }
 }
 
