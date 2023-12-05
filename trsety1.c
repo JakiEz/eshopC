@@ -89,23 +89,24 @@ int main() {
             printf("Enter your choice: \033[0m");
             scanf("%d", &choice);
 
-            switch (choice) {
-                case 1:
-                    purchaseItem();
-                    break;
-                case 2:
-                    loggedIn = 0;
-                    printf("\033[1;32mLogged out successfully!\n\033[0m");
-                    break;
-                case 3:
-                    viewProducts();
-                    break;
-                default:
-                    printf("\033[1;31mInvalid choice. Please enter a valid option.\n\033[0m");
+                switch (choice) {
+                    case 1:
+                        viewProducts();
+                        purchaseItem();
+                        break;
+                    case 2:
+                        loggedIn = 0;
+                        printf("Logged out successfully!\n");
+                        break;
+                    case 3:
+                        viewProducts();
+                        break;
+                    default:
+                        printf("Invalid choice. Please enter a valid option.\n");
+                }
             }
         }
     }
-}
 
     return 0;
 }
