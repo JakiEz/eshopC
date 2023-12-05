@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #define MAX_SIZE 100
 #define USER_FILE "users.csv"
@@ -178,11 +179,16 @@ void addItem() {
         printf("Error opening product file.\n");
         exit(1);
     }
+ time_t t = time(NULL);
+    struct tm *tm_info = localtime(&t);
+    char datetime[MAX_SIZE];
+    strftime(datetime, MAX_SIZE, "%m/%d/%y %H:%M:%S", tm_info);
 
-    fprintf(file, "%s,%.2f,%d\n", name, price, quantity);
+    fprintf(file, "%s,%.2f,%d,%s\n", name, price, quantity, datetime);
+
     fclose(file);
 
-    printf("Item added successfully!\n");
+    printf("Product '%s' added successfully at %s.\n", name, datetime);
 }
 
 void purchaseItem() {
@@ -281,20 +287,21 @@ void viewProducts() {
     }
 
     printf("\nProduct List:\n");
-    printf("=======================================\n");
-    printf("Name\t\tPrice\t\tQuantity\n");
-    printf("=======================================\n");
+    printf("====================================================================\n");
+    printf("Name\t\tPrice\t\tQuantity\t\tStock-date\n");
+    printf("====================================================================\n");
 
     char line[MAX_SIZE];
     while (fgets(line, sizeof(line), file)) {
         char name[MAX_SIZE];
         float price;
         int quantity;
-        sscanf(line, "%[^,],%f,%d", name, &price, &quantity);
-        printf("%-15s%-15.2f%-15d\n", name, price, quantity);
+        char datetime[MAX_SIZE];
+        sscanf(line, "%[^,],%f,%d,%[^\n]", name, &price, &quantity, datetime);
+        printf("%-15s%-20.2f%-18d%-25s\n", name, price, quantity, datetime);
     }
 
-    printf("=======================================\n");
+    printf("=====================================================================\n");
     
     fclose(file);
 }
