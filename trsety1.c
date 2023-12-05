@@ -83,6 +83,7 @@ int main() {
 
                 switch (choice) {
                     case 1:
+                        viewProducts();
                         purchaseItem();
                         break;
                     case 2:
