@@ -194,9 +194,6 @@ void purchaseItem() {
     int finishTransaction = 0;
 
     while (!finishTransaction) {
-        // Display the product list before prompting for the product name
-        viewProducts();
-
         printf("Enter product name (or type 'finish' to complete the purchase): ");
         scanf("%s", name);
 
@@ -270,7 +267,6 @@ void purchaseItem() {
         printf("Not enough money. Purchase failed.\n");
     }
 }
-
 
 
 void viewProducts() {
