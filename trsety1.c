@@ -356,6 +356,8 @@ void viewProducts() {
     printf("\033[1;35m==================================================================================================================================\n");
     
     fclose(file);
+    system("pause");
+            system("cls");
 }
 void deleteProduct() {
     char name[MAX_SIZE];
@@ -388,6 +390,9 @@ void deleteProduct() {
         if (strcmp(name, storedName) == 0) {
             found = 1;
             printf("Product found and deleted successfully!\n");
+            system("pause");
+            system("cls");
+
         } else {
             fprintf(tempFile, "%s,%.2f,%d\n", storedName, price, quantity);
         }
