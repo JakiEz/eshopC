@@ -6,6 +6,7 @@
 #define MAX_SIZE 100
 #define USER_FILE "users.csv"
 #define PRODUCT_FILE "products.csv"
+#define REVENUE_FILE "revenue.csv"
 
 #define ADMIN 1
 #define EMPLOYEE 2
@@ -15,105 +16,109 @@ int loginUser();
 void addItem();
 void purchaseItem();
 void viewProducts();
+void updateProduct();
 void deleteProduct();
+float checkTotalRevenue();
+void updateRevenueFile(float amount);
 
 int loggedInUserRole = 0;
+float totalRevenue = 0.0;
 
 int main() {
     int choice;
     int loggedIn = 0;
-    
-
-    // Display the shop name in yellow color
-    printf("\033[1;33m%*s*************************\n", (80 + 28) / 2, "");
-    printf("%*s*      SNEAKER SHOP     *\n", (80 + 28) / 2, "");
-    printf("%*s*************************\033[0m\n", (80 + 28) / 2, "");
-
 
     while (1) {
-    if (!loggedIn) {
-        printf("\033[1;31m1. Register\n");
-        printf("2. Login\n");
-        printf("3. Exit\n");
-        printf("Enter your choice: \033[0m");
-        scanf("%d", &choice);
+        if (!loggedIn) {
+            printf("\033[1;33m%*s*************************\n", (80 + 28) / 2, "");
+            printf("%*s*      SNEAKER SHOP     *\n", (80 + 28) / 2, "");
+            printf("%*s*************************\033[0m\n", (80 + 28) / 2, "");
 
-
-        switch (choice) {
-            case 1:
-                registerUser();
-                system("pause");
-                   system("cls");
-                break;
-            case 2:
-                if (loginUser()) {
-                    printf("\033[1;32mLogin successful!\n\033[0m");
-                    loggedIn = 1;
-                   system("pause");
-                   system("cls");
-                } else {
-                    printf("\033[1;31mLogin failed. Invalid username or password.\n\033[0m");
-                
-                }
-                break;
-            case 3:
-                printf("\033[1;31mExiting program. Goodbye!\n\033[0m");
-                exit(0);
-            default:
-                printf("\033[1;31mInvalid choice. Please enter a valid option.\n\033[0m");
-        }
-    } else {
-        if (loggedInUserRole == ADMIN) {
-
-             // Display ADMIN 
-    printf("\033[1;33m%*s*************************\n", (80 + 28) / 2, "");
-    printf("%*s*         ADMIN         *\n", (80 + 28) / 2, "");
-    printf("%*s*************************\033[0m\n", (80 + 28) / 2, "");
-            printf("\033[1;31m1. Add Item\n");
-            printf("2. Delete Item\n");
-            printf("3. View Products\n");
-            printf("4. Logout\n");
+            printf("\033[1;31m1. Register\n");
+            printf("2. Login\n");
+            printf("3. Exit\n");
             printf("Enter your choice: \033[0m");
             scanf("%d", &choice);
-            system("cls");
 
             switch (choice) {
                 case 1:
-                viewProducts();
-                    addItem();
-                    break;
-                case 3:
-                    viewProducts();
-                    break;
-                case 4:
-                    loggedIn = 0;
-                    printf("\033[1;32mLogged out successfully!\n\033[0m");
+                    registerUser();
+                    system("pause");
+                    system("cls");
                     break;
                 case 2:
-                viewProducts();
-                    deleteProduct();
+                    if (loginUser()) {
+                        printf("\033[1;32mLogin successful!\n\033[0m");
+                        loggedIn = 1;
+                        system("pause");
+                        system("cls");
+                    } else {
+                        printf("\033[1;31mLogin failed. Invalid username or password.\n\033[0m");
+                    }
                     break;
+                case 3:
+                    printf("\033[1;31mExiting program. Goodbye!\n\033[0m");
+                    exit(0);
                 default:
                     printf("\033[1;31mInvalid choice. Please enter a valid option.\n\033[0m");
             }
-        } else if (loggedInUserRole == EMPLOYEE) {
-
-             // Display employee 
-    printf("\033[1;33m%*s*************************\n", (80 + 28) / 2, "");
-    printf("%*s*        EMPLOYEE       *\n", (80 + 28) / 2, "");
-    printf("%*s*************************\033[0m\n", (80 + 28) / 2, "");
-
-            printf("\033[1;31m1. Purchase Item\n");
-            printf("2. Logout\n");
-            printf("3. View Products\n");
-            printf("Enter your choice: \033[0m");
-            scanf("%d", &choice);
-            
-                   system("cls");
+        } else {
+            if (loggedInUserRole == ADMIN) {
+                printf("\033[1;33m%*s*************************\n", (80 + 28) / 2, "");
+                printf("%*s*         ADMIN         *\n", (80 + 28) / 2, "");
+                printf("%*s*************************\033[0m\n", (80 + 28) / 2, "");
+                printf("\033[1;31m1. Add Item\n");
+                printf("2. Delete Item\n");
+                printf("3. View Products and Update Product\n");
+                printf("4. Logout\n");
+                printf("5. Check Total Revenue\n");
+                printf("Enter your choice: \033[0m");
+                scanf("%d", &choice);
+                system("cls");
 
                 switch (choice) {
                     case 1:
+                        viewProducts();
+                        addItem();
+                        break;
+                    case 3:
+                        viewProducts();
+                        updateProduct();
+                        system("pause");
+                        system("cls");
+                        break;
+                    case 4:
+                        loggedIn = 0;
+                        printf("\033[1;32mLogged out successfully!\n\033[0m");
+                        break;
+                    case 2:
+                        viewProducts();
+                        deleteProduct();
+                        break;
+                    case 5:
+                        printf("\033[1;32mTotal Revenue: $%.2f\n\033[0m", checkTotalRevenue());
+                        // updateRevenueFile(totalRevenue);
+                        
+                        system("pause");
+                        system("cls");
+                        break;
+                    default:
+                        printf("\033[1;31mInvalid choice. Please enter a valid option.\n\033[0m");
+                }
+            } else if (loggedInUserRole == EMPLOYEE) {
+                printf("\033[1;33m%*s*************************\n", (80 + 28) / 2, "");
+                printf("%*s*        EMPLOYEE       *\n", (80 + 28) / 2, "");
+                printf("%*s*************************\033[0m\n", (80 + 28) / 2, "");
+                printf("\033[1;31m1. Purchase Item\n");
+                printf("2. Logout\n");
+                printf("3. View Products\n");
+                printf("Enter your choice: \033[0m");
+                scanf("%d", &choice);
+                system("cls");
 
+                switch (choice) {
+                    case 1:
+                        viewProducts();
                         purchaseItem();
                         break;
                     case 2:
@@ -122,6 +127,8 @@ int main() {
                         break;
                     case 3:
                         viewProducts();
+                        system("pause");
+                        system("cls");
                         break;
                     default:
                         printf("Invalid choice. Please enter a valid option.\n");
@@ -218,7 +225,7 @@ void addItem() {
         printf("\033[1;31mError opening product file.\n\033[0m");
         exit(1);
     }
- time_t t = time(NULL);
+    time_t t = time(NULL);
     struct tm *tm_info = localtime(&t);
     char datetime[MAX_SIZE];
     strftime(datetime, MAX_SIZE, "%m/%d/%y %H:%M:%S", tm_info);
@@ -228,6 +235,7 @@ void addItem() {
     fclose(file);
 
     printf("\033[1;32mProduct '%s' added successfully at %s.\n\033[0m", name, datetime);
+    // updateRevenueFile(price * quantity);
     system("pause");
     system("cls");
 
@@ -242,9 +250,6 @@ void purchaseItem() {
     int finishTransaction = 0;
 
     while (!finishTransaction) {
-        // Display the product list before prompting for the product name
-        viewProducts();
-
         printf("\033[1;33mEnter product name (or type 'finish' to complete the purchase): \033[0m");
         scanf("%s", name);
 
@@ -265,13 +270,13 @@ void purchaseItem() {
                 char storedName[MAX_SIZE];
                 float price;
                 int storedQuantity;
-                sscanf(line, "%[^,],%f,%d", storedName, &price, &storedQuantity);
+                char datetime[MAX_SIZE];
+                sscanf(line, "%[^,],%f,%d,%[^\n]", storedName, &price, &storedQuantity, datetime);
 
                 if (strcmp(name, storedName) == 0) {
                     found = 1;
                     printf("\033[1;33mEnter quantity to purchase for %s: \033[0m", name);
                     scanf("%d", &quantity);
-                    system("cls");
 
                     if (storedQuantity >= quantity) {
                         totalPrice = quantity * price;
@@ -282,16 +287,21 @@ void purchaseItem() {
                         FILE *tempFile = fopen("temp.csv", "w");
                         rewind(file);
                         while (fgets(line, sizeof(line), file)) {
-                            sscanf(line, "%[^,],%f,%d", storedName, &price, &storedQuantity);
+                            sscanf(line, "%[^,],%f,%d,%[^\n]", storedName, &price, &storedQuantity, datetime);
                             if (strcmp(name, storedName) == 0) {
                                 storedQuantity -= quantity;
+                                // Preserve the timestamp while updating the quantity
+                                fprintf(tempFile, "%s,%.2f,%d,%s\n", storedName, price, storedQuantity, datetime);
+                            } else {
+                                // If not the target product, write the line as is
+                                fprintf(tempFile, "%s", line);
                             }
-                            fprintf(tempFile, "%s,%.2f,%d\n", storedName, price, storedQuantity);
                         }
                         fclose(file);
                         fclose(tempFile);
                         remove(PRODUCT_FILE);
                         rename("temp.csv", PRODUCT_FILE);
+                        updateRevenueFile(totalPrice);
                     } else {
                         printf("\033[1;31mNot enough stock. Please choose a lower quantity.\n\033[0m");
                     }
@@ -302,8 +312,7 @@ void purchaseItem() {
 
             if (!found) {
                 printf("\033[1;31mProduct not found. Please enter a valid product name.\n\033[0m");
-                    system("cls");
-
+                system("cls");
             }
         }
     }
@@ -317,13 +326,11 @@ void purchaseItem() {
         change = money - totalCost;
         printf("\033[1;32mChange: %.2f\n", change);
         printf("Purchase successful!\n");
-                    system("pause");
-                    system("cls");
-
+        system("pause");
+        system("cls");
     } else {
         printf("\033[1;31mNot enough money. Purchase failed.\n\033[0m");
-                    system("cls");
-
+        system("cls");
     }
 }
 
@@ -356,8 +363,7 @@ void viewProducts() {
     printf("\033[1;35m==================================================================================================================================\n");
     
     fclose(file);
-    system("pause");
-            system("cls");
+    
 }
 void deleteProduct() {
     char name[MAX_SIZE];
@@ -406,6 +412,122 @@ void deleteProduct() {
 
     if (!found) {
         printf("Product not found. Deletion failed.\n");
+    }
+}
+void updateRevenueFile(float amount) {
+    FILE *file = fopen(REVENUE_FILE, "a");
+    if (file == NULL) {
+        printf("\033[1;31mError opening revenue file.\n\033[0m");
+        exit(1);
+    }
+
+    time_t t = time(NULL);
+    struct tm *tm_info = localtime(&t);
+    char datetime[MAX_SIZE];
+    strftime(datetime, MAX_SIZE, "%m/%d/%y %H:%M:%S", tm_info);
+
+    fprintf(file, "%.2f,%s\n", amount, datetime);
+    fclose(file);
+
+}
+
+float checkTotalRevenue() {
+    FILE *file = fopen(REVENUE_FILE, "r");
+    if (file == NULL) {
+        printf("\033[1;31mError opening revenue file.\n\033[0m");
+        exit(1);
+    }
+
+    float total = 0.0;
+    char line[MAX_SIZE];
+
+    while (fgets(line, sizeof(line), file)) {
+        float amount;
+        sscanf(line, "%f,", &amount);
+        total += amount;
+    }
+
+    fclose(file);
+
+    
+    totalRevenue = total;
+
+    return total;
+}
+void updateProduct() {
+    char name[MAX_SIZE];
+    int choice;
+    float newPrice;
+    int newQuantity;
+
+    printf("\033[1;33mEnter product name to update: \033[0m");
+    scanf(" %99[^\n]", name);
+
+    FILE *file = fopen(PRODUCT_FILE, "r");
+    if (file == NULL) {
+        printf("\033[1;31mError opening product file.\n\033[0m");
+        exit(1);
+    }
+
+    FILE *tempFile = fopen("temp.csv", "w");
+    if (tempFile == NULL) {
+        fclose(file);
+        printf("\033[1;31mError opening temporary file.\n\033[0m");
+        exit(1);
+    }
+
+    char line[MAX_SIZE];
+    int found = 0;
+
+    while (fgets(line, sizeof(line), file)) {
+        char storedName[MAX_SIZE];
+        float price;
+        int quantity;
+        char datetime[MAX_SIZE];
+        sscanf(line, " %99[^,],%f,%d,%19[^\n]", storedName, &price, &quantity, datetime);
+
+        if (strcmp(name, storedName) == 0) {
+            found = 1;
+
+            printf("\033[1;33mSelect attribute to update or cancel:\n");
+            printf("1. Price\n");
+            printf("2. Quantity\n");
+            printf("3. Cancel\n");
+            printf("Enter your choice: \033[0m");
+            scanf("%d", &choice);
+
+            switch (choice) {
+                case 1:
+                    printf("\033[1;33mEnter new price: \033[0m");
+                    scanf("%f", &newPrice);
+                    fprintf(tempFile, "%s,%.2f,%d,%s\n", storedName, newPrice, quantity, datetime);
+                    printf("\033[1;32mPrice updated successfully!\n\033[0m");
+                    break;
+                case 2:
+                    printf("\033[1;33mEnter new quantity: \033[0m");
+                    scanf("%d", &newQuantity);
+                    fprintf(tempFile, "%s,%.2f,%d,%s\n", storedName, price, newQuantity, datetime);
+                    printf("\033[1;32mQuantity updated successfully!\n\033[0m");
+                    break;
+                case 3:
+                    fprintf(tempFile, "%s,%.2f,%d,%s\n", storedName, price, quantity, datetime);
+                    break;
+                default:
+                    printf("\033[1;31mInvalid choice. No updates made.\n\033[0m");
+            }
+        } else {
+            fprintf(tempFile, "%s,%.2f,%d,%s\n", storedName, price, quantity, datetime);
+        }
+    }
+
+    fclose(file);
+    fclose(tempFile);
+
+    remove(PRODUCT_FILE);
+    rename("temp.csv", PRODUCT_FILE);
+
+    if (!found) {
+        printf("\033[1;31mProduct not found. Update failed.\n\033[0m");
     }
 }
 
