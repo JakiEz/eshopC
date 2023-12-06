@@ -293,7 +293,7 @@ void purchaseItem() {
                                 // Preserve the timestamp while updating the quantity
                                 fprintf(tempFile, "%s,%.2f,%d,%s\n", storedName, price, storedQuantity, datetime);
                             } else {
-                                // If not the target product, write the line as is
+                                // If not the target peoduct, write the line as is
                                 fprintf(tempFile, "%s", line);
                             }
                         }
@@ -391,7 +391,8 @@ void deleteProduct() {
         char storedName[MAX_SIZE];
         float price;
         int quantity;
-        sscanf(line, "%[^,],%f,%d", storedName, &price, &quantity);
+        char datetime[MAX_SIZE];  // Add a variable to store the timestamp
+        sscanf(line, "%[^,],%f,%d,%[^\n]", storedName, &price, &quantity, datetime);
 
         if (strcmp(name, storedName) == 0) {
             found = 1;
@@ -400,7 +401,7 @@ void deleteProduct() {
             system("cls");
 
         } else {
-            fprintf(tempFile, "%s,%.2f,%d\n", storedName, price, quantity);
+            fprintf(tempFile, "%s,%.2f,%d,%s\n", storedName, price, quantity, datetime);
         }
     }
 
